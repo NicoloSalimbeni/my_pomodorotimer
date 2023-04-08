@@ -10,5 +10,5 @@ Instead of looking around the internet for days I decided to write it on my own.
 ### Usage
 To see the help page just use:
 ```
-./pomodoro.out -h'
+./pomodoro.out -h
 ```
