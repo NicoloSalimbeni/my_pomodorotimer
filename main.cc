@@ -1,5 +1,6 @@
 // Copyright 2023 Nicolò Salimbeni
 #include <chrono>
+#include <cstdlib>
 #include <iostream>
 #include <ostream>
 #include <string>
@@ -15,6 +16,12 @@ int main(int argc, char* argv[]) {
     // std::cout << argv[i] << std::endl;
   }
   AnalysisInfo* info = new AnalysisInfo(initial_paramters);
+
+  // show help page if requested
+  if (info->Contains("h")) {
+    std::system("cat docs/help.txt");
+    return -1;
+  }
 
   // import all usefull parameters in minutes
   int timer_duration      = info->Value("t");

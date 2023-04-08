@@ -1,0 +1,6 @@
+short help page for pomotimer in C++
+-h show this quick help page
+-t set timer duration in minutes, default 50
+-b set short break duration in minutes, default 10
+-B set long break duration in minutes, default 20
+-s set number of short breaks, defaul 3
