@@ -1,11 +1,42 @@
 // Copyright 2023 Nicolò Salimbeni
 #include <chrono>
 #include <cstdlib>
+#include <fstream>
 #include <iostream>
 #include <ostream>
 #include <string>
+#include <thread>
 
 #include "./Utilities/AnalysisInfo.h"
+
+void print(std::string s) {
+  std::cout << "\r" << s << std::flush;
+  std::ofstream out("notify.txt");
+  out << s << std::endl;
+  return;
+}
+
+void countdown(int duration_minutes, std::string type, int count) {
+  // Convert the duration from minutes to seconds
+  int duration_seconds = duration_minutes * 60;
+
+  // Countdown loop
+  int minutes = duration_seconds / 60;
+  int seconds = duration_seconds % 60;
+  for (; minutes >= 0; --minutes) {
+    for (; seconds >= 0; --seconds) {
+      if (minutes == 0 && seconds == 0) {
+        std::cout << "\rTimer finished!" << std::endl;
+      } else {
+        print("(" + std::to_string(count) + ") " + type + ": " +
+              std::to_string(minutes) + ":" + std::to_string(seconds));
+      }
+      std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+    seconds = 59;
+  }
+  return;
+}
 
 int main(int argc, char* argv[]) {
   // take initial parameters and build the AnalysisInfo
@@ -43,7 +74,34 @@ int main(int argc, char* argv[]) {
     long_break_duration = 20;
   }
 
-  std::cout << timer_duration << " " << break_duration << " " << n_short_breaks
-            << std::endl;
+  bool        keep_going = true;
+  std::string state;
+  int         count = 0;
+
+  do {
+    countdown(timer_duration, "Focus", count);
+    count++;
+    print("Break? exit (e), jump (j), start (s) ");
+    std::cin >> state;
+    if (state == "e") {
+      break;
+    } else if (state == "s") {
+      if (count % 3 == 0) {
+        countdown(long_break_duration, "Long break", count);
+      } else {
+        countdown(break_duration, "Break", count);
+      }
+    } else if (state == "j") {
+      continue;
+    }
+    if (keep_going) {
+      print("Press any key to focus");
+      std::string tmp;
+      std::cin >> tmp;
+      std::cout << "\r" << std::endl;
+    }
+  } while (keep_going);
+  print("No timer running");
+
   return 0;
 }
