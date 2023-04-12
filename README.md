@@ -12,3 +12,6 @@ To see the help page just use:
 ```
 ./pomodoro.out -h
 ```
+
+#### External sources
+- the audio used for the bell is from [this](https://mixkit.co/free-sound-effects/bell/) website 

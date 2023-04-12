@@ -27,6 +27,7 @@ void countdown(int duration_minutes, std::string type, int count) {
     for (; seconds >= 0; --seconds) {
       if (minutes == 0 && seconds == 0) {
         std::cout << "\rTimer finished!" << std::endl;
+        std::system("paplay ./audio/bell_1.wav");
       } else {
         print("(" + std::to_string(count) + ") " + type + ": " +
               std::to_string(minutes) + ":" + std::to_string(seconds));
