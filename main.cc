@@ -1,18 +1,62 @@
 // Copyright 2023 Nicolò Salimbeni
 #include <chrono>
 #include <cstdlib>
+#include <ctime>
 #include <fstream>
 #include <iostream>
 #include <ostream>
 #include <string>
+#include <strstream>
 #include <thread>
 
 #include "./Utilities/AnalysisInfo.h"
 
 void print(std::string s) {
   std::cout << "\r" << s << std::flush;
-  std::ofstream out("notify.txt");
+  std::ofstream out("./files/notify.txt");
   out << s << std::endl;
+  return;
+}
+
+std::string date() {
+  // Get the current time
+  // Get the current time as a time_t object
+  time_t current_time = time(nullptr);
+
+  // Convert the time_t object to a tm structure
+  tm time_info;
+  localtime_r(&current_time, &time_info);
+
+  // Extract the day, month, and year from the tm structure
+  int day   = time_info.tm_mday;
+  int month = time_info.tm_mon + 1;
+  int year  = time_info.tm_year + 1900;
+
+  // Save the date string in the dd/mm/yyyy format to a variable
+  std::string date_string = std::to_string(day) + "/" + std::to_string(month) +
+                            "/" + std::to_string(year);
+  return date_string;
+}
+
+int load_counts_from_file() {
+  // load values from file
+  std::ifstream in("./files/date.txt");
+  std::string   date_file;
+  std::string   count_file_s;
+  int           count_file;
+  std::getline(in, date_file);  // useless
+  std::getline(in, count_file_s);
+  count_file = std::stoi(count_file_s);
+
+  return count_file;
+}
+
+void update_count_file(int count) {
+  // write current count value}
+  std::ofstream out("./files/date.txt");
+  out << date() << std::endl;
+  out << count << std::endl;
+
   return;
 }
 
@@ -27,7 +71,7 @@ void countdown(int duration_minutes, std::string type, int count) {
     for (; seconds >= 0; --seconds) {
       if (minutes == 0 && seconds == 0) {
         std::cout << "\rTimer finished!" << std::endl;
-        std::system("paplay ./audio/bell_1.wav");
+        std::system("paplay ./files/bell_1.wav");
       } else {
         print("(" + std::to_string(count) + ") " + type + ": " +
               std::to_string(minutes) + ":" + std::to_string(seconds));
@@ -79,9 +123,23 @@ int main(int argc, char* argv[]) {
   std::string state;
   int         count = 0;
 
+  // check if the day of today is the same of the file
+  std::string today_date = date();
+  std::string file_date;
+
+  std::ifstream in_date("./files/date.txt");
+  std::getline(in_date, file_date);
+
+  if (file_date == today_date) {  // load the value of count
+    count = load_counts_from_file();
+  } else {
+    update_count_file(0);
+  }
+
   do {
     countdown(timer_duration, "Focus", count);
     count++;
+    update_count_file(count);
     print("Break? exit (e), jump (j), start (s) ");
     std::cin >> state;
     if (state == "e") {
@@ -102,7 +160,6 @@ int main(int argc, char* argv[]) {
       std::cout << "\r" << std::endl;
     }
   } while (keep_going);
-  print("No timer running");
 
   return 0;
 }
