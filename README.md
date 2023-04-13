@@ -7,6 +7,10 @@ This is an easy to use version of the famous pomodoro timer. My aim is to write 
 
 Instead of looking around the internet for days I decided to write it on my own. 
 
+What is obtained is the following
+
+![timer example](./files/timer_example.png)
+
 ### Naive usage
 To see the help page just use:
 ```
