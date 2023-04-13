@@ -9,7 +9,7 @@
 #include <strstream>
 #include <thread>
 
-#include "./Utilities/AnalysisInfo.h"
+#include "AnalysisInfo.h"
 
 void print(std::string s) {
   std::cout << "\r" << s << std::flush;

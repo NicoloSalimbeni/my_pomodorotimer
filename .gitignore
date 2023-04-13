@@ -1,8 +1,10 @@
 
-pomodoro
+bin/main
 
 icon.png
 
-start.sh
-
 notify.txt
+
+obj/
+
+start.sh

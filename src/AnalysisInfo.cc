@@ -32,7 +32,7 @@ int AnalysisInfo::Value(std::string to_find) {
 
   // find the value
   int position = 0;
-  for (int i = 0; i < argoments.size(); i++) {
+  for (unsigned long int i = 0; i < argoments.size(); i++) {
     if (argoments[i] == ("-" + to_find)) {
       position = i + 1;
     }
