@@ -6,7 +6,7 @@ SRCS=$(wildcard $(SRC)/*.cc)
 OBJS=$(patsubst $(SRC)/%.cc, $(OBJ)/%.o, $(SRCS))
 
 BINDIR=bin
-BIN=$(BINDIR)/main
+BIN=$(BINDIR)/pomodoro
 
 all:$(BIN)
 
