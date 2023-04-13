@@ -1,4 +1,4 @@
-# my_pomodorotimer
+# Pomodorotimer
 ### Why another version of the pomodoro timer?
 This is an easy to use version of the famous pomodoro timer. My aim is to write a C++ executable for myself, I don't like all the web versions and the community based versions. I need something that works offline and with the following functionalities:
 - long and short breaks
