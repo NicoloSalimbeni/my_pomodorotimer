@@ -10,7 +10,7 @@ Instead of looking around the internet for days I decided to write it on my own.
 ### Naive usage
 To see the help page just use:
 ```
-./bin/pomodoro.out -h
+./bin/pomodoro -h
 ```
 
 ### start script + i3 integration
