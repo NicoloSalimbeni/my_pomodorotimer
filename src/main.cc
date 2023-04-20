@@ -4,6 +4,7 @@
 #include <ctime>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <ostream>
 #include <string>
 #include <strstream>
@@ -154,10 +155,10 @@ int main(int argc, char* argv[]) {
       continue;
     }
     if (keep_going) {
-      print("Press any key to focus");
+      print("Press enter to focus");
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       std::string tmp;
-      std::cin >> tmp;
-      std::cout << "\r" << std::endl;
+      std::getline(std::cin, tmp);
     }
   } while (keep_going);
 
