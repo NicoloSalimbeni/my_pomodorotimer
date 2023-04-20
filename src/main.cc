@@ -71,7 +71,6 @@ void countdown(int duration_minutes, std::string type, int count) {
   for (; minutes >= 0; --minutes) {
     for (; seconds >= 0; --seconds) {
       if (minutes == 0 && seconds == 0) {
-        std::cout << "\rTimer finished!" << std::endl;
         std::system("paplay ./files/bell_1.wav");
       } else {
         print("(" + std::to_string(count) + ") " + type + ": " +
@@ -141,18 +140,16 @@ int main(int argc, char* argv[]) {
     countdown(timer_duration, "Focus", count);
     count++;
     update_count_file(count);
-    print("Break? exit (e), jump (j), start (s) ");
-    std::cin >> state;
-    if (state == "e") {
-      break;
-    } else if (state == "s") {
+    print("Break? start (Enter), jump (j) ");
+    std::getline(std::cin, state);
+    if (state == "j") {
+      continue;
+    } else {
       if (count % 3 == 0) {
         countdown(long_break_duration, "Long break", count);
       } else {
         countdown(break_duration, "Break", count);
       }
-    } else if (state == "j") {
-      continue;
     }
     if (keep_going) {
       print("Press enter to focus");
