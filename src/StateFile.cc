@@ -58,7 +58,8 @@ void StateFile::UpdateValueOf(std::string key, std::string value) {
   }
   it->second = value;
   // update the vector which will be printed
-  for (int i = 0; i < all_file.size(); i++) {
+  int n_lines = all_file.size();
+  for (int i = 0; i < n_lines; i++) {
     if (all_file[i].find(key) != std::string::npos) {
       all_file[i] = key + ": " + value;
     }
