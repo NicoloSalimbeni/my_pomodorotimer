@@ -1,0 +1,4 @@
+# prova state file
+date: 24/04/2023
+counts: 10
+last_timer: 4:15
