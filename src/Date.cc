@@ -3,11 +3,17 @@
 #include <ctime>
 #include <string>
 
-Date::Date(std::string path_string) : path(path_string) {}
+#include "./../include/StateFile.h"
+
+Date::Date(StateFile* s) : file(s) {
+  date_today = UpdateTodayDate();
+  file_date  = file->ValueOf("date");
+  return;
+}
 
 Date::~Date() {}
 
-std::string Date::TodayDate() {
+std::string Date::UpdateTodayDate() {
   // Get the current time
   // Get the current time as a time_t object
   time_t current_time = time(nullptr);
@@ -26,3 +32,11 @@ std::string Date::TodayDate() {
                             "/" + std::to_string(year);
   return date_string;
 }
+
+void Date::UpdateFileDate(std::string new_date) {
+  file->UpdateValueOf("date", new_date);
+  file->UpdateFile();
+  return;
+}
+
+std::string Date::GetTodayDate() { return date_today; }
