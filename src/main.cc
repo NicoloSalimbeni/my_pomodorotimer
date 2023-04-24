@@ -10,7 +10,7 @@
 #include <strstream>
 #include <thread>
 
-#include "AnalysisInfo.h"
+#include "./../include/AnalysisInfo.h"
 
 void print(std::string s) {
   std::cout << "\r" << s << std::flush;
