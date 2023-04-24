@@ -1,5 +1,5 @@
 // Copyright 2023 Nicolò Salimbeni
-#include "AnalysisInfo.h"
+#include "./../include/AnalysisInfo.h"
 
 #include <iostream>
 #include <sstream>
