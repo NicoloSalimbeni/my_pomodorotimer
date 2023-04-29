@@ -8,14 +8,16 @@
 
 class Timer {
  public:
-  Timer(int b, int B, int f, int c, int s, StateFile *state,
-        std::string notify_path, std::string audio_path);
+  Timer(int b, int B, int f, int c, StateFile *state, std::string notify_path,
+        std::string audio_path);
   void Focus();
   void Break();
+  void LongBreak();
   void LoadTime();
   void CountDown(int minutes, int seconds,
                  std::string type);   // update private memebers
   void PrintTimer(std::string type);  // print on screen and notify
+  void RingBell();                    // ring the bell audio
 
  private:
   // minutes and seconds
@@ -25,11 +27,10 @@ class Timer {
   // usefull members
   StateFile  *file;
   std::string audio_file;
-  int         break_length;
-  int         long_break_length;
-  int         focus_lenght;
+  int         break_length;       // in minutes
+  int         long_break_length;  // in minutes
+  int         focus_lenght;       // in minutes
   int         counts;
-  int         n_short_breaks;
   std::string notify_file;
 };
 

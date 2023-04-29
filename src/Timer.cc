@@ -8,13 +8,12 @@
 
 #include "./../include/StateFile.h"
 
-Timer::Timer(int b, int B, int f, int c, int s, StateFile *state,
+Timer::Timer(int b, int B, int f, int c, StateFile *state,
              std::string notify_path, std::string audio_path) {
   break_length      = b;
   long_break_length = B;
   focus_lenght      = f;
   counts            = c;
-  n_short_breaks    = s;
   file              = state;
   audio_file        = audio_path;
   notify_file       = notify_path;
@@ -42,11 +41,7 @@ void Timer::CountDown(int minutes_in, int seconds_in, std::string type) {
   timer_sec = duration_seconds % 60;
   for (; timer_min >= 0; --timer_min) {
     for (; timer_sec >= 0; --timer_sec) {
-      if (timer_min == 0 && timer_sec == 0) {
-        std::system(("paplay" + audio_file).c_str());
-      } else {
-        PrintTimer(type);
-      }
+      PrintTimer(type);
       std::this_thread::sleep_for(std::chrono::seconds(1));
     }
     timer_sec = 59;
@@ -77,4 +72,27 @@ void Timer::LoadTime() {
   minutes = std::stoi(minutes_s);
   seconds = std::stoi(seconds_s);
   std::cout << minutes << " " << seconds << std::endl;
+}
+
+void Timer::RingBell() {
+  std::system(("paplay" + audio_file).c_str());
+  return;
+}
+
+void Timer::Focus() {
+  CountDown(focus_lenght, 0, "Focus");
+  RingBell();
+  return;
+}
+
+void Timer::Break() {
+  CountDown(break_length, 0, "Break");
+  RingBell();
+  return;
+}
+
+void Timer::LongBreak() {
+  CountDown(long_break_length, 0, "Long Break");
+  RingBell();
+  return;
 }
