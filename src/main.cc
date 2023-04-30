@@ -153,9 +153,7 @@ int main(int argc, char* argv[]) {
     }
     if (keep_going) {
       print("Press enter to focus");
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      std::string tmp;
-      std::getline(std::cin, tmp);
+      std::cin.get();
     }
   } while (keep_going);
 

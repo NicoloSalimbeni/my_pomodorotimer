@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <ostream>
 #include <string>
 #include <thread>
 
@@ -28,7 +29,19 @@ void Timer::PrintTimer(std::string type) {
   std::ofstream out(notify_file.c_str());
   out << "(" << counts << ") " << type + ": " << timer_min << ":" << timer_sec
       << std::endl;
-  return;
+
+  // if Focus update also the state file
+  if (type == "Focus") {
+    std::string time =
+        std::to_string(timer_min) + ":" + std::to_string(timer_sec);
+    file->UpdateValueOf("last_timer", time);
+  }
+
+  // if Break or Long Break just write break
+  if (type == "Break" || type == "Long Break") {
+    file->UpdateValueOf("last_timer", "break");
+  }
+
   return;
 }
 
@@ -54,6 +67,11 @@ void Timer::LoadTime() {
   if (file == nullptr) {
     std::cout << "can't resume timer, state file not found" << std::endl;
     return;
+  } else if (file->ValueOf("last_timer") == "break") {
+    std::cout << "Timer stopped during a break, it's time to focus!"
+              << std::endl;
+    Focus();
+    return;
   }
   std::string time = file->ValueOf("last_timer");
 
@@ -71,16 +89,17 @@ void Timer::LoadTime() {
   }
   minutes = std::stoi(minutes_s);
   seconds = std::stoi(seconds_s);
-  std::cout << minutes << " " << seconds << std::endl;
+  CountDown(minutes, seconds, "Focus");
 }
 
 void Timer::RingBell() {
-  std::system(("paplay" + audio_file).c_str());
+  std::system(("paplay " + audio_file).c_str());
   return;
 }
 
 void Timer::Focus() {
   CountDown(focus_lenght, 0, "Focus");
+  counts++;
   RingBell();
   return;
 }
