@@ -7,22 +7,49 @@
 #include <string>
 #include <thread>
 
+#include "./../include/Date.h"
 #include "./../include/StateFile.h"
 
-Timer::Timer(int b, int B, int f, int c, StateFile *state,
+Timer::Timer(int b, int B, int f, int n, StateFile *state,
              std::string notify_path, std::string audio_path) {
   break_length      = b;
   long_break_length = B;
   focus_lenght      = f;
-  counts            = c;
+  n_short_breaks    = n;
   file              = state;
   audio_file        = audio_path;
   notify_file       = notify_path;
+  date              = new Date(file);
+  return;
+}
 
+void Timer::LoadCounts() {
+  // this function decide the value of counts member. If the date of the state
+  // file is different from today date the counter is set to zero and the date
+  // of the file is updated. If the date of the file is the same of today the
+  // counter is resumed with the number saved inside the file
+  std::string today_date = date->GetTodayDate();
+  std::string file_date  = file->ValueOf("date");
+  if (file_date == today_date) {
+    // if the date is the date of today load the counts from the file
+    counts = std::stoi(file->ValueOf("counts"));
+    return;
+  } else if (file_date != today_date) {
+    // check the date of the file, if it's not the same of today counts=0
+    counts = 0;
+    file->UpdateValueOf("counts", std::to_string(counts));
+    file->UpdateValueOf("date", today_date);
+    return;
+  }
+
+  std::cout << "error in loading the conts, counter set to 0" << std::endl;
+  counts = 0;
+  file->UpdateValueOf("counts", std::to_string(counts));
   return;
 }
 
 void Timer::PrintTimer(std::string type) {
+  // print the value of the timer inside notify.txt and on screen
   std::cout << "\r"
             << "(" << counts << ") " << type + ": " << timer_min << ":"
             << timer_sec << std::flush;
@@ -46,7 +73,8 @@ void Timer::PrintTimer(std::string type) {
 }
 
 void Timer::CountDown(int minutes_in, int seconds_in, std::string type) {
-  // Convert the duration from minutes to seconds
+  // script from chatGPT
+  //  Convert the duration from minutes to seconds
   int duration_seconds = minutes_in * 60 + seconds_in;
 
   // Countdown loop
@@ -63,7 +91,9 @@ void Timer::CountDown(int minutes_in, int seconds_in, std::string type) {
   return;
 }
 
-void Timer::LoadTime() {
+void Timer::LoadTimer() {
+  // reeds when the last timer stopped, if it was stopped during a break nothing
+  // happens, if it was stopped during a focus it resumes the timer
   if (file == nullptr) {
     std::cout << "can't resume timer, state file not found" << std::endl;
     return;
@@ -80,7 +110,8 @@ void Timer::LoadTime() {
   int         i = time.find(':');
   std::string minutes_s;
   std::string seconds_s;
-  for (int j = 0; j < time.size(); j++) {
+  int         string_size = time.size();
+  for (auto j = 0; j < string_size; j++) {
     if (j < i) {
       minutes_s += time[j];
     } else if (j > i) {
@@ -90,28 +121,59 @@ void Timer::LoadTime() {
   minutes = std::stoi(minutes_s);
   seconds = std::stoi(seconds_s);
   CountDown(minutes, seconds, "Focus");
+  AddCount();
+  return;
 }
 
-void Timer::RingBell() {
+void Timer::RingBell() const {
+  // play the bell using PulseAudio
   std::system(("paplay " + audio_file).c_str());
   return;
 }
 
 void Timer::Focus() {
+  // start a Focus timer and the update the counter of completed timers
   CountDown(focus_lenght, 0, "Focus");
-  counts++;
+  AddCount();
   RingBell();
   return;
 }
 
-void Timer::Break() {
+void Timer::ShortBreak() {
+  // start a short break
   CountDown(break_length, 0, "Break");
   RingBell();
   return;
 }
 
 void Timer::LongBreak() {
+  // start a long break
   CountDown(long_break_length, 0, "Long Break");
   RingBell();
+  return;
+}
+
+void Timer::Break() {
+  // decide if a short break or a long break is required based on if the decided
+  // number of short breaks in a row was already done. In that case starts a
+  // long break, otherwise a short one.
+  if (counts % n_short_breaks == 0) {
+    LongBreak();
+  } else {
+    Break();
+  }
+  return;
+}
+
+int Timer::GetCounts() const {
+  // return the number of completed focus timers
+  return counts;
+}
+
+void Timer::AddCount() {
+  // add a count to the focus timer counter and update the value inside the
+  // state file
+  counts++;
+  file->UpdateValueOf("counts", std::to_string(counts));
   return;
 }

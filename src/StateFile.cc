@@ -8,6 +8,7 @@
 #include <vector>
 
 StateFile::StateFile(std::string path) : file_path(path) {
+  // load all lines from the file, also comments
   std::ifstream            file_in(file_path);
   std::vector<std::string> v_lines;
   std::string              line_tmp;
@@ -19,7 +20,7 @@ StateFile::StateFile(std::string path) : file_path(path) {
     if (line_tmp[0] != '#') v_lines.push_back(line_tmp);
   }
 
-  // fill file_info
+  // fill file_info, only useful information, no comments
   for (auto line : v_lines) {
     std::stringstream line_out(line);
     std::string       key;
@@ -33,6 +34,7 @@ StateFile::StateFile(std::string path) : file_path(path) {
 }
 
 bool StateFile::Contains(std::string key) {
+  // check if a key is present inside the file
   auto it = info.find(key);
   if (it != info.end())
     return true;
@@ -41,6 +43,7 @@ bool StateFile::Contains(std::string key) {
 }
 
 std::string StateFile::ValueOf(std::string key) {
+  // return the value of a key as a string
   auto it = info.find(key);
   if (it != info.end())
     return it->second;
@@ -50,6 +53,7 @@ std::string StateFile::ValueOf(std::string key) {
 }
 
 void StateFile::UpdateValueOf(std::string key, std::string value) {
+  // update the value of a key
   // update map
   auto it = info.find(key);
   if (it == info.end()) {
@@ -64,10 +68,12 @@ void StateFile::UpdateValueOf(std::string key, std::string value) {
       all_file[i] = key + ": " + value;
     }
   }
+  UpdateFile();
   return;
 }
 
 void StateFile::PrintAll() {
+  // print every key and the value on screen, also comments
   for (auto line : all_file) {
     std::cout << line << std::endl;
   }
@@ -75,6 +81,7 @@ void StateFile::PrintAll() {
 }
 
 void StateFile::UpdateFile() {
+  // update values inside the .txt file
   std::ofstream file_out(file_path);
   for (auto line : all_file) {
     file_out << line << std::endl;

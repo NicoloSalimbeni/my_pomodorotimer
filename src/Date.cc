@@ -1,20 +1,24 @@
 #include "./../include/Date.h"
 
 #include <ctime>
+#include <iostream>
 #include <string>
 
 #include "./../include/StateFile.h"
 
 Date::Date(StateFile* s) : file(s) {
-  date_today = UpdateTodayDate();
-  file_date  = file->ValueOf("date");
+  UpdateTodayDate();                  // load today date
+  file_date = file->ValueOf("date");  // load date from file
   return;
 }
 
 Date::~Date() {}
 
-std::string Date::UpdateTodayDate() {
-  // Get the current time
+void Date::UpdateTodayDate() {
+  // save today date inside the private member of the object date_today as a
+  // string in the format DD/MM/YYYY
+
+  // script from chatGPT
   // Get the current time as a time_t object
   time_t current_time = time(nullptr);
 
@@ -30,13 +34,26 @@ std::string Date::UpdateTodayDate() {
   // Save the date string in the dd/mm/yyyy format to a variable
   std::string date_string = std::to_string(day) + "/" + std::to_string(month) +
                             "/" + std::to_string(year);
-  return date_string;
-}
-
-void Date::UpdateFileDate(std::string new_date) {
-  file->UpdateValueOf("date", new_date);
-  file->UpdateFile();
+  date_today = date_string;
   return;
 }
 
-std::string Date::GetTodayDate() { return date_today; }
+void Date::UpdateFileDate(std::string new_date) const {
+  // write inside the state file the new date
+  file->UpdateValueOf("date", new_date);
+  return;
+}
+
+std::string Date::GetTodayDate() const {
+  // return today date in a string in the format DD/MM/YYYY
+  return date_today;
+}
+
+bool Date::IsToday() const {
+  // return a bool that tells if the date_today is the same as the file_date
+  // inside the state file
+  if (date_today == file_date) {
+    return true;
+  }
+  return false;
+}
