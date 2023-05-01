@@ -121,6 +121,7 @@ void Timer::LoadTimer() {
   minutes = std::stoi(minutes_s);
   seconds = std::stoi(seconds_s);
   CountDown(minutes, seconds, "Focus");
+  RingBell();
   AddCount();
   return;
 }
@@ -157,10 +158,11 @@ void Timer::Break() {
   // decide if a short break or a long break is required based on if the decided
   // number of short breaks in a row was already done. In that case starts a
   // long break, otherwise a short one.
+
   if (counts % n_short_breaks == 0) {
     LongBreak();
   } else {
-    Break();
+    ShortBreak();
   }
   return;
 }
