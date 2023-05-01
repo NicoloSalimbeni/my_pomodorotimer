@@ -94,6 +94,10 @@ int main(int argc, char* argv[]) {
       if (br == "") {
         timer->Break();
       }
+
+      print("Press enter to focus");
+      std::string tmp;
+      std::getline(std::cin, tmp);
     }
   }
 
