@@ -50,17 +50,18 @@ void Timer::LoadCounts() {
 
 void Timer::PrintTimer(std::string type) {
   // print the value of the timer inside notify.txt and on screen
+  std::string timer_sec_str = timer_sec / 10 == 0 ? "0"+std::to_string(timer_sec) : std::to_string(timer_sec);
   std::cout << "\r"
             << "(" << counts << ") " << type + ": " << timer_min << ":"
-            << timer_sec << std::flush;
+            << timer_sec_str << std::flush;
   std::ofstream out(notify_file.c_str());
-  out << "(" << counts << ") " << type + ": " << timer_min << ":" << timer_sec
+  out << "(" << counts << ") " << type + ": " << timer_min << ":" << timer_sec_str
       << std::endl;
 
   // if Focus update also the state file
   if (type == "Focus") {
     std::string time =
-        std::to_string(timer_min) + ":" + std::to_string(timer_sec);
+        std::to_string(timer_min) + ":" + timer_sec_str;
     file->UpdateValueOf("last_timer", time);
   }
 
@@ -123,6 +124,7 @@ void Timer::LoadTimer() {
   CountDown(minutes, seconds, "Focus");
   RingBell();
   AddCount();
+  file->UpdateValueOf("last_timer", "break");
   return;
 }
 
@@ -137,6 +139,7 @@ void Timer::Focus() {
   CountDown(focus_lenght, 0, "Focus");
   AddCount();
   RingBell();
+  file->UpdateValueOf("last_timer", "break");
   return;
 }
 
