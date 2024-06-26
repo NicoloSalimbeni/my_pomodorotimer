@@ -1,4 +1,0 @@
-#state file
-date: 30/4/2023
-counts: 6
-last_timer: break
