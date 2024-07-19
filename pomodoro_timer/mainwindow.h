@@ -17,8 +17,14 @@ class MainWindow : public QMainWindow
   public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void startTimer(int minutes, int seconds);
+    void showTimer(int minutes, int seconds);
+
+  private slots:
+    void on_startButton_clicked();
 
   private:
     Ui::MainWindow *ui;
+    bool stopTimer;
 };
 #endif // MAINWINDOW_H
