@@ -1,12 +1,7 @@
 
-bin/main
-
+./bin/*
+**/build
 icon.png
-
-notify.txt
-
-obj/
 
 start.sh
 
-files/date.txt
