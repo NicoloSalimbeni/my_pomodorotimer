@@ -1,6 +1,6 @@
 
-bin/main
-
+./bin/*
+**/build
 icon.png
 
 start.sh
