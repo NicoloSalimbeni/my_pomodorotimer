@@ -1,9 +1,0 @@
-/home/nicolo/programmi/my_pomodorotimer/pomodoro_timer/build/Desktop-Debug/CMakeFiles/pomodoro_timer.dir
-/home/nicolo/programmi/my_pomodorotimer/pomodoro_timer/build/Desktop-Debug/CMakeFiles/edit_cache.dir
-/home/nicolo/programmi/my_pomodorotimer/pomodoro_timer/build/Desktop-Debug/CMakeFiles/rebuild_cache.dir
-/home/nicolo/programmi/my_pomodorotimer/pomodoro_timer/build/Desktop-Debug/CMakeFiles/list_install_components.dir
-/home/nicolo/programmi/my_pomodorotimer/pomodoro_timer/build/Desktop-Debug/CMakeFiles/install.dir
-/home/nicolo/programmi/my_pomodorotimer/pomodoro_timer/build/Desktop-Debug/CMakeFiles/install/local.dir
-/home/nicolo/programmi/my_pomodorotimer/pomodoro_timer/build/Desktop-Debug/CMakeFiles/install/strip.dir
-/home/nicolo/programmi/my_pomodorotimer/pomodoro_timer/build/Desktop-Debug/CMakeFiles/pomodoro_timer_autogen_timestamp_deps.dir
-/home/nicolo/programmi/my_pomodorotimer/pomodoro_timer/build/Desktop-Debug/CMakeFiles/pomodoro_timer_autogen.dir
