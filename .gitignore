@@ -1,7 +1,5 @@
-
-./bin/*
+bin/*
 **/build
 icon.png
-
 start.sh
 
